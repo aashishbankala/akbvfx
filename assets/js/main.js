@@ -32,9 +32,34 @@ const createMedia = (project, className = "project-media") => {
   `;
 };
 
+const normalizeSoftwareName = (name = "") => name.toLowerCase().replace(/[^a-z0-9]/g, "");
+
+const getSoftwareLogo = (project) => {
+  const projectSoftware = project.software || [];
+
+  return projectSoftware
+    .map((name) => {
+      const normalized = normalizeSoftwareName(name);
+      return software.find((item) => normalizeSoftwareName(item.name) === normalized);
+    })
+    .find(Boolean);
+};
+
+const projectSoftwareBadge = (project) => {
+  const item = getSoftwareLogo(project);
+  if (!item) return "";
+
+  return `
+    <span class="project-software-badge" title="${item.name}">
+      <img src="${item.logo}" alt="${item.name} logo" loading="lazy" />
+    </span>
+  `;
+};
+
 const projectCard = (project) => `
   <a class="project-card" href="project.html?slug=${project.slug}" aria-label="Open ${project.title}">
     ${createMedia(project)}
+    ${projectSoftwareBadge(project)}
     <span class="project-card-glow"></span>
     <div class="project-card-content">
       <p>${project.kicker}</p>
