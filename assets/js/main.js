@@ -291,11 +291,6 @@ const setupAutoScroll = () => {
   ].filter((item) => item.element);
 
   scrollers.forEach(({ element, speed, startLabel }) => {
-    let isDragging = false;
-    let dragStartX = 0;
-    let dragStartLeft = 0;
-    let dragMoved = false;
-    let pausedUntil = 0;
     let lastTime = performance.now();
     let loopPoint = 0;
     let hasSetInitialPosition = false;
@@ -330,10 +325,6 @@ const setupAutoScroll = () => {
       hasSetInitialPosition = true;
     };
 
-    const pause = (duration = 650) => {
-      pausedUntil = performance.now() + duration;
-    };
-
     const normalize = () => {
       if (!loopPoint) measure();
       if (!loopPoint) return;
@@ -344,69 +335,6 @@ const setupAutoScroll = () => {
         element.scrollLeft += loopPoint;
       }
     };
-
-    element.addEventListener("pointerdown", (event) => {
-      isDragging = true;
-      dragMoved = false;
-      dragStartX = event.clientX;
-      dragStartLeft = element.scrollLeft;
-      element.classList.add("is-dragging");
-      element.setPointerCapture?.(event.pointerId);
-      pause(700);
-    });
-
-    element.addEventListener("pointermove", (event) => {
-      if (!isDragging) return;
-
-      const delta = event.clientX - dragStartX;
-      if (Math.abs(delta) > 4) dragMoved = true;
-      element.scrollLeft = dragStartLeft - delta;
-      normalize();
-      pause(350);
-    });
-
-    element.addEventListener("pointerup", (event) => {
-      isDragging = false;
-      element.classList.remove("is-dragging");
-      element.releasePointerCapture?.(event.pointerId);
-      pause(450);
-    });
-
-    element.addEventListener("pointercancel", () => {
-      isDragging = false;
-      element.classList.remove("is-dragging");
-      pause(450);
-    });
-
-    element.addEventListener(
-      "click",
-      (event) => {
-        if (!dragMoved) return;
-        event.preventDefault();
-        event.stopPropagation();
-        dragMoved = false;
-      },
-      true
-    );
-
-    element.addEventListener("scroll", () => {
-      normalize();
-    });
-
-    element.addEventListener(
-      "wheel",
-      (event) => {
-        const amount =
-          Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
-        event.preventDefault();
-        element.scrollLeft += amount;
-        normalize();
-        pause(650);
-      },
-      { passive: false }
-    );
-
-    element.addEventListener("touchstart", () => pause(800), { passive: true });
 
     window.addEventListener("resize", measure);
     window.requestAnimationFrame(() => {
@@ -419,9 +347,8 @@ const setupAutoScroll = () => {
       lastTime = now;
 
       const canScroll = element.scrollWidth > element.clientWidth;
-      const paused = isDragging || now < pausedUntil;
 
-      if (canScroll && !paused) {
+      if (canScroll) {
         element.scrollLeft += speed * delta;
         normalize();
       }
@@ -580,29 +507,14 @@ const setupCursor = () => {
   document.body.appendChild(cursor);
   document.body.classList.add("has-custom-cursor");
 
-  let targetX = -100;
-  let targetY = -100;
-  let currentX = targetX;
-  let currentY = targetY;
-
   window.addEventListener("pointermove", (event) => {
-    targetX = event.clientX;
-    targetY = event.clientY;
+    cursor.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0) translate(-50%, -50%)`;
     cursor.classList.add("is-visible");
   });
 
   window.addEventListener("pointerdown", () => cursor.classList.add("is-pressed"));
   window.addEventListener("pointerup", () => cursor.classList.remove("is-pressed"));
   window.addEventListener("pointerleave", () => cursor.classList.remove("is-visible"));
-
-  const follow = () => {
-    currentX += (targetX - currentX) * 0.18;
-    currentY += (targetY - currentY) * 0.18;
-    cursor.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) translate(-50%, -50%)`;
-    window.requestAnimationFrame(follow);
-  };
-
-  follow();
 };
 
 setupLogoLoader();

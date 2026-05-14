@@ -543,14 +543,13 @@ svg {
 
 .software-marquee {
   margin-top: 2rem;
-  overflow-x: auto;
+  overflow-x: hidden;
   overflow-y: hidden;
   border-block: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.025);
   mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
   scroll-behavior: auto;
   scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
   user-select: none;
 }
 
@@ -619,24 +618,12 @@ svg {
 
 .project-rail {
   margin-top: 2rem;
-  overflow-x: auto;
+  overflow-x: hidden;
   overflow-y: hidden;
   mask-image: linear-gradient(90deg, transparent, black 7%, black 93%, transparent);
   scroll-behavior: auto;
   scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
   user-select: none;
-}
-
-.software-marquee,
-.project-rail {
-  cursor: grab;
-  touch-action: pan-x;
-}
-
-.software-marquee.is-dragging,
-.project-rail.is-dragging {
-  cursor: grabbing;
 }
 
 .project-rail-track {
@@ -657,6 +644,7 @@ svg {
   border-radius: var(--radius);
   background: var(--bg-soft);
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.32);
+  cursor: pointer;
   isolation: isolate;
 }
 
@@ -788,6 +776,64 @@ svg {
     rgba(255, 255, 255, 0.035);
 }
 
+.site-footer {
+  width: min(calc(100% - 32px), var(--max));
+  margin: 0 auto;
+  padding: 2rem 0 3rem;
+}
+
+.footer-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2rem;
+  align-items: end;
+  border-top: 1px solid var(--line);
+  padding-top: 1.5rem;
+}
+
+.footer-main h2 {
+  margin: 0;
+  font-size: clamp(1.6rem, 4vw, 3.4rem);
+  line-height: 0.95;
+}
+
+.footer-main p:last-child {
+  max-width: 720px;
+  margin: 0.85rem 0 0;
+  color: var(--muted-strong);
+  line-height: 1.65;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.55rem;
+}
+
+.footer-links a {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  border: 1px solid rgba(238, 244, 238, 0.24);
+  border-radius: var(--pill);
+  padding: 0 0.9rem;
+  color: var(--muted-strong);
+  font-weight: 800;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    background 180ms ease;
+}
+
+.footer-links a:hover {
+  transform: translateY(-3px);
+  border-color: rgba(88, 255, 143, 0.46);
+  background: rgba(88, 255, 143, 0.08);
+  color: var(--text);
+}
+
 .subpage-shell {
   padding-top: 7.5rem;
 }
@@ -809,6 +855,108 @@ svg {
   max-width: 760px;
   margin-top: 1.4rem;
   font-size: 1.08rem;
+}
+
+.about-layout {
+  display: grid;
+  width: min(calc(100% - 32px), var(--max));
+  grid-template-columns: minmax(0, 0.94fr) minmax(300px, 0.72fr);
+  gap: 2rem;
+  align-items: start;
+  margin: 0 auto;
+  padding: 1rem 0 6rem;
+}
+
+.about-copy h2 {
+  margin: 0;
+  max-width: 780px;
+  font-size: clamp(2.15rem, 5vw, 5.2rem);
+  line-height: 0.96;
+  letter-spacing: 0;
+}
+
+.about-copy p:not(.eyebrow) {
+  max-width: 720px;
+  margin: 1.25rem 0 0;
+  color: var(--muted-strong);
+  line-height: 1.75;
+}
+
+.about-facts {
+  display: grid;
+  gap: 1px;
+  overflow: hidden;
+  margin-top: 2rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--line);
+}
+
+.about-facts div {
+  display: grid;
+  gap: 0.45rem;
+  padding: 1rem;
+  background: rgba(10, 13, 12, 0.96);
+}
+
+.about-facts span {
+  color: var(--green);
+  font-size: 0.74rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.about-facts strong {
+  line-height: 1.45;
+}
+
+.about-media-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.about-media {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.about-media-large {
+  aspect-ratio: 4 / 5;
+}
+
+.about-media:not(.about-media-large) {
+  aspect-ratio: 16 / 9;
+}
+
+.about-placeholder {
+  width: 100%;
+  height: calc(100% - 48px);
+  min-height: 180px;
+}
+
+.about-placeholder-primary {
+  background:
+    radial-gradient(circle at 56% 32%, rgba(138, 255, 220, 0.18), transparent 18rem),
+    linear-gradient(145deg, rgba(88, 255, 143, 0.22), transparent 34%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.06) 0 1px, transparent 1px 36px),
+    #090d0b;
+}
+
+.about-placeholder-secondary {
+  background:
+    linear-gradient(120deg, transparent 0 18%, rgba(88, 255, 143, 0.2) 18% 20%, transparent 20% 62%, rgba(255, 255, 255, 0.08) 62% 64%, transparent 64%),
+    radial-gradient(circle at 28% 72%, rgba(88, 255, 143, 0.18), transparent 15rem),
+    #070908;
+}
+
+.about-media figcaption {
+  border-top: 1px solid var(--line);
+  padding: 0.8rem 1rem;
+  color: var(--muted-strong);
+  font-weight: 800;
 }
 
 .project-grid-section {
@@ -1168,8 +1316,14 @@ svg {
 
   .intro-section,
   .contact-band,
-  .detail-hero {
+  .detail-hero,
+  .about-layout,
+  .footer-main {
     grid-template-columns: 1fr;
+  }
+
+  .footer-links {
+    justify-content: flex-start;
   }
 
   .detail-meta-grid {
