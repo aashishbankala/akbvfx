@@ -21,7 +21,7 @@ if (isReloadNavigation && pageName === "index.html") {
 const createMedia = (project, className = "project-media") => {
   if (project.coverType === "video") {
     return `
-      <video class="${className}" src="${project.cover}" autoplay muted loop playsinline></video>
+      <video class="${className}" src="${project.cover}" autoplay muted loop playsinline preload="metadata"></video>
     `;
   }
 
@@ -99,14 +99,7 @@ const renderHomeProjects = () => {
   const rail = document.querySelector("#homeProjectRail");
   if (!rail) return;
 
-  rail.innerHTML = [
-    ...projects,
-    ...projects,
-    ...projects,
-    ...projects,
-    ...projects,
-    ...projects,
-  ]
+  rail.innerHTML = [...projects, ...projects, ...projects]
     .map(projectCard)
     .join("");
 };
@@ -178,6 +171,9 @@ const renderProjectDetail = () => {
 
   const slug = new URLSearchParams(window.location.search).get("slug") || projects[0]?.slug;
   const project = projects.find((item) => item.slug === slug);
+  const projectIndex = projects.findIndex((item) => item.slug === slug);
+  const nextProject =
+    projectIndex >= 0 && projects.length > 1 ? projects[(projectIndex + 1) % projects.length] : null;
 
   if (!project) {
     detail.innerHTML = `
@@ -227,8 +223,8 @@ const renderProjectDetail = () => {
 
       <section class="detail-gallery" data-reveal>
         <div class="section-heading">
-          <p class="eyebrow">Behind The Scenes</p>
-          <h2>Breakdowns, gallery, and process media.</h2>
+          <p class="eyebrow">Project Media</p>
+          <h2>Preview, process, and breakdown material.</h2>
         </div>
         ${
           project.gallery.length
@@ -238,6 +234,21 @@ const renderProjectDetail = () => {
               </div>`
         }
       </section>
+
+      ${
+        nextProject
+          ? `<nav class="project-detail-nav" data-reveal aria-label="Project navigation">
+              <a class="button button-ghost" href="projects.html">All Projects</a>
+              <a class="button button-deep-green next-project-link" href="project.html?slug=${nextProject.slug}">
+                <span>Next Project</span>
+                <strong>${nextProject.title}</strong>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="m14 5 7 7-7 7-1.4-1.45 4.5-4.55H3v-2h14.1l-4.5-4.55L14 5Z" />
+                </svg>
+              </a>
+            </nav>`
+          : ""
+      }
     </article>
   `;
 };
@@ -309,16 +320,47 @@ const setupScrollMotion = () => {
   update();
 };
 
+const setupProjectRailControls = () => {
+  const rail = document.querySelector(".project-rail");
+  if (!rail) return;
+
+  document.querySelectorAll("[data-project-nudge]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const direction = Number(button.getAttribute("data-project-nudge")) || 1;
+      rail.dispatchEvent(
+        new CustomEvent("akb:nudge-scroll", {
+          detail: { direction },
+        })
+      );
+      button.classList.add("is-active");
+      window.setTimeout(() => button.classList.remove("is-active"), 520);
+    });
+  });
+};
+
 const setupAutoScroll = () => {
   const scrollers = [
-    { element: document.querySelector(".software-marquee"), speed: 46, startLabel: "Houdini" },
-    { element: document.querySelector(".project-rail"), speed: 56 },
+    {
+      element: document.querySelector(".software-marquee"),
+      speed: 46,
+      responsiveBoost: 0.012,
+      startLabel: "Houdini",
+    },
+    {
+      element: document.querySelector(".project-rail"),
+      speed: 78,
+      responsiveBoost: 0.04,
+    },
   ].filter((item) => item.element);
 
-  scrollers.forEach(({ element, speed, startLabel }) => {
+  scrollers.forEach(({ element, speed, responsiveBoost = 0, startLabel }) => {
     let lastTime = performance.now();
     let loopPoint = 0;
     let hasSetInitialPosition = false;
+    let nudgeSpeed = 0;
+    let nudgeUntil = 0;
+
+    const currentSpeed = () => speed + Math.min(window.innerWidth, 2200) * responsiveBoost;
 
     const centerStartItem = () => {
       if (!startLabel) return false;
@@ -367,6 +409,12 @@ const setupAutoScroll = () => {
       window.requestAnimationFrame(measure);
     });
 
+    element.addEventListener("akb:nudge-scroll", (event) => {
+      const direction = event.detail?.direction || 1;
+      nudgeSpeed = direction * Math.max(currentSpeed() * 5.5, element.clientWidth * 1.4);
+      nudgeUntil = performance.now() + 520;
+    });
+
     const tick = (now) => {
       const delta = Math.min((now - lastTime) / 1000, 0.05);
       lastTime = now;
@@ -374,7 +422,8 @@ const setupAutoScroll = () => {
       const canScroll = element.scrollWidth > element.clientWidth;
 
       if (canScroll) {
-        element.scrollLeft += speed * delta;
+        const boost = now < nudgeUntil ? nudgeSpeed : 0;
+        element.scrollLeft += (currentSpeed() + boost) * delta;
         normalize();
       }
 
@@ -551,6 +600,7 @@ renderProjectDetail();
 setupVideoControls();
 setupReveal();
 setupScrollMotion();
+setupProjectRailControls();
 setupAutoScroll();
 setupParticleField();
 setupCursor();

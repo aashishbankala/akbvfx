@@ -88,8 +88,20 @@
             <p class="eyebrow">Selected Work</p>
             <h2>Auto-scrolling project cards linked directly to each project page.</h2>
           </div>
-          <div class="project-rail" data-reveal>
-            <div class="project-rail-track" id="homeProjectRail"></div>
+          <div class="project-rail-shell" data-reveal>
+            <button class="rail-arrow rail-arrow-left" type="button" data-project-nudge="-1" aria-label="Catch projects scrolling left">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M14.8 5 8 12l6.8 7 1.4-1.42L10.8 12l5.4-5.58L14.8 5Z" />
+              </svg>
+            </button>
+            <div class="project-rail">
+              <div class="project-rail-track" id="homeProjectRail"></div>
+            </div>
+            <button class="rail-arrow rail-arrow-right" type="button" data-project-nudge="1" aria-label="Catch projects scrolling right">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m9.2 19 6.8-7-6.8-7-1.4 1.42L13.2 12l-5.4 5.58L9.2 19Z" />
+              </svg>
+            </button>
           </div>
         </section>
 

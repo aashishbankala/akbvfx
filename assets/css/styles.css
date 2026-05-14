@@ -538,7 +538,13 @@ svg {
 
 .software-section,
 .project-section {
+  width: min(calc(100% - 16px), 1680px);
   overflow: hidden;
+}
+
+.project-section .section-heading {
+  width: min(calc(100% - 32px), var(--max));
+  margin: 0 auto;
 }
 
 .software-marquee {
@@ -616,14 +622,60 @@ svg {
   max-height: 80px;
 }
 
-.project-rail {
+.project-rail-shell {
+  position: relative;
   margin-top: 2rem;
+}
+
+.project-rail {
   overflow-x: hidden;
   overflow-y: hidden;
   mask-image: linear-gradient(90deg, transparent, black 7%, black 93%, transparent);
   scroll-behavior: auto;
   scrollbar-width: none;
   user-select: none;
+}
+
+.rail-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 6;
+  display: grid;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  border: 1px solid rgba(238, 244, 238, 0.2);
+  border-radius: var(--pill);
+  background: rgba(5, 8, 7, 0.76);
+  color: var(--text);
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.rail-arrow-left {
+  left: clamp(0.5rem, 1.8vw, 1.5rem);
+}
+
+.rail-arrow-right {
+  right: clamp(0.5rem, 1.8vw, 1.5rem);
+}
+
+.rail-arrow:hover,
+.rail-arrow.is-active {
+  transform: translateY(-50%) scale(1.08);
+  border-color: rgba(88, 255, 143, 0.5);
+  background: rgba(10, 168, 83, 0.36);
+  box-shadow: 0 0 20px rgba(88, 255, 143, 0.16);
+}
+
+.rail-arrow svg {
+  width: 1.3rem;
+  height: 1.3rem;
 }
 
 .project-rail-track {
@@ -635,8 +687,10 @@ svg {
 .project-card {
   position: relative;
   display: flex;
-  width: min(76vw, 410px);
-  height: 520px;
+  width: clamp(390px, 42vw, 720px);
+  aspect-ratio: 16 / 9;
+  min-height: 280px;
+  height: auto;
   flex: 0 0 auto;
   align-items: flex-end;
   overflow: hidden;
@@ -992,24 +1046,32 @@ svg {
 
 .project-grid .project-card {
   width: 100%;
+  aspect-ratio: 16 / 10;
+  min-height: 0;
 }
 
 .detail-page {
-  padding-top: 1rem;
+  width: min(calc(100% - 32px), 1360px);
+  padding-top: clamp(1.5rem, 3vw, 3.5rem);
   padding-bottom: 5rem;
 }
 
 .detail-hero {
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(320px, 0.76fr);
-  gap: 2rem;
-  align-items: start;
+  grid-template-columns: minmax(320px, 0.82fr) minmax(420px, 1.1fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
   min-height: 0;
-  padding: 1rem 0 3rem;
+  padding: clamp(1.5rem, 3vw, 3rem) 0 clamp(3rem, 6vw, 6rem);
+}
+
+.detail-copy {
+  display: grid;
+  align-content: center;
 }
 
 .back-link {
-  margin-bottom: 2rem;
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
   font-size: 0.9rem;
   width: max-content;
 }
@@ -1020,8 +1082,8 @@ svg {
 
 .detail-copy p {
   max-width: 720px;
-  margin-top: 1.35rem;
-  font-size: 1.05rem;
+  margin-top: 1.5rem;
+  font-size: clamp(1.02rem, 1.15vw, 1.22rem);
 }
 
 .detail-media-wrap {
@@ -1040,6 +1102,7 @@ svg {
 
 .detail-meta-grid {
   display: grid;
+  margin-top: 0.5rem;
   width: 100%;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1px;
@@ -1055,7 +1118,7 @@ svg {
   min-height: 0;
   min-width: 0;
   place-items: center;
-  padding: 1.05rem 1rem;
+  padding: clamp(1rem, 1.6vw, 1.4rem);
   text-align: center;
   background: rgba(10, 13, 12, 0.96);
 }
@@ -1069,14 +1132,14 @@ svg {
 
 .detail-meta-grid strong {
   color: var(--text);
-  font-size: 1rem;
+  font-size: clamp(0.95rem, 1vw, 1.08rem);
   line-height: 1.45;
   max-width: 100%;
   overflow-wrap: break-word;
 }
 
 .detail-gallery {
-  padding-top: 6rem;
+  padding-top: clamp(4rem, 7vw, 7rem);
 }
 
 .gallery-grid {
@@ -1106,6 +1169,32 @@ svg {
   border-top: 1px solid var(--line);
   padding: 0.8rem 1rem;
   color: var(--muted-strong);
+}
+
+.project-detail-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding-top: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+.next-project-link {
+  min-height: 54px;
+  padding: 0.4rem 0.9rem 0.4rem 1.1rem;
+}
+
+.next-project-link span {
+  color: rgba(238, 244, 238, 0.7);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+
+.next-project-link strong {
+  max-width: min(42vw, 360px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .empty-gallery {
@@ -1352,6 +1441,10 @@ svg {
   .detail-meta-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .detail-hero {
+    gap: 2rem;
+  }
 }
 
 @media (max-width: 680px) {
@@ -1408,7 +1501,23 @@ svg {
   }
 
   .project-card {
-    height: 440px;
+    width: min(84vw, 420px);
+    aspect-ratio: 4 / 5;
+    min-height: 410px;
+    height: auto;
+  }
+
+  .project-grid .project-card {
+    aspect-ratio: 4 / 5;
+  }
+
+  .rail-arrow {
+    width: 40px;
+    height: 40px;
+  }
+
+  .next-project-link strong {
+    max-width: 52vw;
   }
 
   .detail-meta-grid {

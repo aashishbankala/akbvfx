@@ -1,85 +1,5 @@
 window.AKBVFX_PROJECTS = [
   {
-    slug: "showreel-2026",
-    title: "VFX Showreel 2026",
-    kicker: "Compositing / FX / CG Integration",
-    date: "2026",
-    role: "VFX Artist",
-    software: ["Houdini", "Nuke", "Maya", "Blender"],
-    renderer: "Arnold / Redshift / Karma",
-    coverType: "video",
-    cover: "assets/media/showreel.mp4",
-    description:
-      "A curated showreel landing piece for Aashish Kumar Bankala. Use this project page as the main reel breakdown, then add stills, before-and-after images, node graphs, viewport captures, or shot notes as your portfolio grows.",
-    gallery: [
-      {
-        type: "video",
-        src: "assets/media/showreel.mp4",
-        caption: "Full showreel playback.",
-      },
-    ],
-  },
-  {
-    slug: "houdini-procedural-building",
-    title: "Procedural Building System",
-    kicker: "Houdini / Procedural Modeling",
-    date: "2026",
-    role: "Procedural Artist",
-    software: ["Houdini"],
-    renderer: "Houdini Viewport",
-    coverType: "video",
-    cover: "assets/media/projects/houdini-procedural-building.mp4",
-    description:
-      "A Houdini procedural building study focused on modular structure, repeatable controls, and fast architectural variation. The piece shows how a flexible setup can generate complex building forms while keeping the design art-directable.",
-    gallery: [
-      {
-        type: "video",
-        src: "assets/media/projects/houdini-procedural-building.mp4",
-        caption: "Procedural building system preview.",
-      },
-    ],
-  },
-  {
-    slug: "houdini-procedural-texturing-programming",
-    title: "Procedural Texturing Study",
-    kicker: "Houdini / Texturing / Programming",
-    date: "2026",
-    role: "Procedural Artist",
-    software: ["Houdini"],
-    renderer: "Houdini Viewport",
-    coverType: "video",
-    cover: "assets/media/projects/houdini-procedural-texturing-programming.mp4",
-    description:
-      "A procedural texturing and programming test in Houdini, built around controlled variation, surface breakup, and reusable logic. It highlights technical workflow thinking as much as the final visual result.",
-    gallery: [
-      {
-        type: "video",
-        src: "assets/media/projects/houdini-procedural-texturing-programming.mp4",
-        caption: "Procedural texturing and programming preview.",
-      },
-    ],
-  },
-  {
-    slug: "unreal-aliens-lookdev",
-    title: "Aliens Lookdev",
-    kicker: "Unreal Engine / Creature Lookdev",
-    date: "2026",
-    role: "Lookdev Artist",
-    software: ["Unreal Engine"],
-    renderer: "Unreal Engine",
-    coverType: "video",
-    cover: "assets/media/projects/unreal-aliens-lookdev.mp4",
-    description:
-      "An Unreal Engine look-development piece exploring alien forms, lighting mood, material response, and cinematic presentation. The focus is on selling shape, atmosphere, and readable creature detail in real time.",
-    gallery: [
-      {
-        type: "video",
-        src: "assets/media/projects/unreal-aliens-lookdev.mp4",
-        caption: "Aliens lookdev preview.",
-      },
-    ],
-  },
-  {
     slug: "unreal-one-last-time-cybercity",
     title: "One Last Time: Cyber City",
     kicker: "Unreal Engine / Cinematic Environment",
@@ -116,6 +36,86 @@ window.AKBVFX_PROJECTS = [
         type: "video",
         src: "assets/media/projects/maya-swedish-bar.mp4",
         caption: "Swedish bar environment preview.",
+      },
+    ],
+  },
+  {
+    slug: "houdini-procedural-texturing-programming",
+    title: "Procedural Texturing Study",
+    kicker: "Houdini / Texturing / Programming",
+    date: "2026",
+    role: "Procedural Artist",
+    software: ["Houdini"],
+    renderer: "Houdini Viewport",
+    coverType: "video",
+    cover: "assets/media/projects/houdini-procedural-texturing-programming.mp4",
+    description:
+      "A procedural texturing and programming test in Houdini, built around controlled variation, surface breakup, and reusable logic. It highlights technical workflow thinking as much as the final visual result.",
+    gallery: [
+      {
+        type: "video",
+        src: "assets/media/projects/houdini-procedural-texturing-programming.mp4",
+        caption: "Procedural texturing and programming preview.",
+      },
+    ],
+  },
+  {
+    slug: "houdini-procedural-building",
+    title: "Procedural Building System",
+    kicker: "Houdini / Procedural Modeling",
+    date: "2026",
+    role: "Procedural Artist",
+    software: ["Houdini"],
+    renderer: "Houdini Viewport",
+    coverType: "video",
+    cover: "assets/media/projects/houdini-procedural-building.mp4",
+    description:
+      "A Houdini procedural building study focused on modular structure, repeatable controls, and fast architectural variation. The piece shows how a flexible setup can generate complex building forms while keeping the design art-directable.",
+    gallery: [
+      {
+        type: "video",
+        src: "assets/media/projects/houdini-procedural-building.mp4",
+        caption: "Procedural building system preview.",
+      },
+    ],
+  },
+  {
+    slug: "unreal-aliens-lookdev",
+    title: "Aliens Look Dev",
+    kicker: "Unreal Engine / Creature Lookdev",
+    date: "2026",
+    role: "Lookdev Artist",
+    software: ["Unreal Engine"],
+    renderer: "Unreal Engine",
+    coverType: "video",
+    cover: "assets/media/projects/unreal-aliens-lookdev.mp4",
+    description:
+      "An Unreal Engine look-development piece exploring alien forms, lighting mood, material response, and cinematic presentation. The focus is on selling shape, atmosphere, and readable creature detail in real time.",
+    gallery: [
+      {
+        type: "video",
+        src: "assets/media/projects/unreal-aliens-lookdev.mp4",
+        caption: "Aliens lookdev preview.",
+      },
+    ],
+  },
+  {
+    slug: "showreel-2026",
+    title: "VFX Showreel 2026",
+    kicker: "Compositing / FX / CG Integration",
+    date: "2026",
+    role: "VFX Artist",
+    software: ["Houdini", "Nuke", "Maya", "Blender"],
+    renderer: "Arnold / Redshift / Karma",
+    coverType: "video",
+    cover: "assets/media/showreel.mp4",
+    description:
+      "A curated showreel landing piece for Aashish Kumar Bankala, bringing together compositing, FX, CG integration, and cinematic VFX work in one main reel.",
+    gallery: [
+      {
+        type: "video",
+        src: "assets/media/showreel.mp4",
+        caption: "Full showreel playback.",
       },
     ],
   },
