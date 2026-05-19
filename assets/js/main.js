@@ -172,6 +172,10 @@ const renderProjectDetail = () => {
   const slug = new URLSearchParams(window.location.search).get("slug") || projects[0]?.slug;
   const project = projects.find((item) => item.slug === slug);
   const projectIndex = projects.findIndex((item) => item.slug === slug);
+  const previousProject =
+    projectIndex >= 0 && projects.length > 1
+      ? projects[(projectIndex - 1 + projects.length) % projects.length]
+      : null;
   const nextProject =
     projectIndex >= 0 && projects.length > 1 ? projects[(projectIndex + 1) % projects.length] : null;
 
@@ -238,6 +242,13 @@ const renderProjectDetail = () => {
       ${
         nextProject
           ? `<nav class="project-detail-nav" data-reveal aria-label="Project navigation">
+              <a class="button button-deep-green previous-project-link" href="project.html?slug=${previousProject.slug}">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="m14 5 7 7-7 7-1.4-1.45 4.5-4.55H3v-2h14.1l-4.5-4.55L14 5Z" />
+                </svg>
+                <span>Previous Project</span>
+                <strong>${previousProject.title}</strong>
+              </a>
               <a class="button button-ghost" href="projects.html">All Projects</a>
               <a class="button button-deep-green next-project-link" href="project.html?slug=${nextProject.slug}">
                 <span>Next Project</span>
