@@ -613,38 +613,66 @@ const setupLiquidLight = () => {
     ".art-card",
   ].join(",");
 
+  const elements = Array.from(document.querySelectorAll(selector));
+  if (!elements.length) return;
+
+  const visibleElements = new Set();
   let pointerX = window.innerWidth * 0.5;
   let pointerY = window.innerHeight * 0.25;
-  let activeElement = null;
   let frame = 0;
 
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
-  const clearElement = (element) => {
-    if (!element) return;
-    element.classList.remove("is-liquid-lit");
-    [
-      "--light-x",
-      "--light-y",
-      "--edge-top-color",
-      "--edge-right-color",
-      "--edge-bottom-color",
-      "--edge-left-color",
-      "--edge-green-color",
-    ].forEach((property) => element.style.removeProperty(property));
+  const observe = () => {
+    if (!("IntersectionObserver" in window)) {
+      elements.forEach((element) => visibleElements.add(element));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            visibleElements.add(entry.target);
+          } else {
+            visibleElements.delete(entry.target);
+          }
+        });
+        requestUpdate();
+      },
+      { rootMargin: "180px" }
+    );
+
+    elements.forEach((element) => observer.observe(element));
   };
 
   const update = () => {
     frame = 0;
-    if (!activeElement) return;
 
-    const rect = activeElement.getBoundingClientRect();
-    if (!rect.width || !rect.height) return;
+    visibleElements.forEach((element) => {
+      const rect = element.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
 
-    const x = clamp(((pointerX - rect.left) / rect.width) * 100, -24, 124);
-    const y = clamp(((pointerY - rect.top) / rect.height) * 100, -24, 124);
-    activeElement.style.setProperty("--light-x", `${x.toFixed(1)}%`);
-    activeElement.style.setProperty("--light-y", `${y.toFixed(1)}%`);
+      const x = clamp(((pointerX - rect.left) / rect.width) * 100, -35, 135);
+      const y = clamp(((pointerY - rect.top) / rect.height) * 100, -35, 135);
+      const topEdge = clamp((58 - y) / 74, 0, 1);
+      const rightEdge = clamp((x - 42) / 74, 0, 1);
+      const bottomEdge = clamp((y - 42) / 74, 0, 1);
+      const leftEdge = clamp((58 - x) / 74, 0, 1);
+      const edgeMax = Math.max(topEdge, rightEdge, bottomEdge, leftEdge);
+
+      const whiteEdge = (amount, base = 0.07, boost = 0.42) =>
+        `rgba(255, 255, 255, ${(base + amount * boost).toFixed(3)})`;
+      const greenEdge = `rgba(88, 255, 143, ${(0.04 + edgeMax * 0.14).toFixed(3)})`;
+
+      element.style.setProperty("--light-x", `${x.toFixed(1)}%`);
+      element.style.setProperty("--light-y", `${y.toFixed(1)}%`);
+      element.style.setProperty("--edge-top-color", whiteEdge(topEdge, 0.1, 0.42));
+      element.style.setProperty("--edge-right-color", whiteEdge(rightEdge));
+      element.style.setProperty("--edge-bottom-color", whiteEdge(bottomEdge, 0.06, 0.32));
+      element.style.setProperty("--edge-left-color", whiteEdge(leftEdge));
+      element.style.setProperty("--edge-green-color", greenEdge);
+    });
   };
 
   const requestUpdate = () => {
@@ -652,32 +680,21 @@ const setupLiquidLight = () => {
     frame = window.requestAnimationFrame(update);
   };
 
+  observe();
+  requestUpdate();
+
   window.addEventListener(
     "pointermove",
     (event) => {
       pointerX = event.clientX;
       pointerY = event.clientY;
-      const target = event.target.closest?.(selector) || null;
-
-      if (target !== activeElement) {
-        clearElement(activeElement);
-        activeElement = target;
-        if (activeElement) activeElement.classList.add("is-liquid-lit");
-      }
-
       requestUpdate();
     },
     { passive: true }
   );
 
-  const clearActive = () => {
-    clearElement(activeElement);
-    activeElement = null;
-  };
-
-  window.addEventListener("pointerleave", clearActive);
-  window.addEventListener("scroll", clearActive, { passive: true });
-  window.addEventListener("resize", clearActive);
+  window.addEventListener("scroll", requestUpdate, { passive: true });
+  window.addEventListener("resize", requestUpdate);
 };
 
 const setupCursor = () => {
