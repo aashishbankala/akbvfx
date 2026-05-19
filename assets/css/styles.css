@@ -1435,6 +1435,186 @@ svg {
   transform: translateY(0);
 }
 
+/* Prototype 2: liquid glass refinement. These overrides remove hard outlines and
+   use soft light/shadow so the glass feels molded rather than bordered. */
+.topbar,
+.main-nav a,
+.social-links a:not(.resume-link),
+.resume-link,
+.button,
+.software-marquee,
+.software-chip,
+.rail-arrow,
+.project-card,
+.project-software-badge,
+.project-card-meta span,
+.generated-visual span,
+.contact-band,
+.footer-links a,
+.about-facts,
+.about-facts div,
+.about-media,
+.detail-media-wrap,
+.detail-meta-grid,
+.detail-meta-grid div,
+.gallery-item,
+.project-detail-nav > a,
+.empty-gallery,
+.art-card {
+  border: 0;
+  outline: 0;
+}
+
+.software-marquee {
+  border-block: 0;
+}
+
+.footer-main,
+.about-media figcaption,
+.gallery-item figcaption {
+  border-top: 0;
+}
+
+.intro-copy {
+  border-left: 0;
+  padding-left: 0;
+}
+
+.topbar,
+.software-chip,
+.rail-arrow,
+.project-software-badge,
+.project-card-meta span,
+.generated-visual span,
+.footer-links a,
+.detail-meta-grid div,
+.about-facts div {
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.3),
+    inset 0 -16px 28px rgba(0, 0, 0, 0.16),
+    inset 0 10px 24px rgba(255, 255, 255, 0.045),
+    0 16px 34px rgba(0, 0, 0, 0.24);
+}
+
+.button,
+.contact-band,
+.about-media,
+.detail-media-wrap,
+.gallery-item,
+.art-card,
+.empty-gallery {
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.32),
+    inset 0 -24px 34px rgba(0, 0, 0, 0.2),
+    inset 0 16px 30px rgba(255, 255, 255, 0.04),
+    0 22px 58px rgba(0, 0, 0, 0.28);
+}
+
+.project-card {
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.22),
+    inset 0 -26px 42px rgba(0, 0, 0, 0.28),
+    0 24px 80px rgba(0, 0, 0, 0.34);
+}
+
+.topbar,
+.topbar-solid {
+  background:
+    linear-gradient(90deg, rgba(10, 168, 83, 0.48) 0%, rgba(6, 47, 27, 0.34) 22%, rgba(3, 4, 3, 0.42) 43%, rgba(3, 4, 3, 0.42) 57%, rgba(6, 47, 27, 0.34) 78%, rgba(10, 168, 83, 0.48) 100%),
+    radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.2), transparent 32%),
+    radial-gradient(circle at 82% 100%, rgba(88, 255, 143, 0.12), transparent 34%),
+    rgba(8, 14, 11, 0.44);
+}
+
+.main-nav a,
+.social-links a:not(.resume-link),
+.resume-link,
+.footer-links a {
+  background:
+    radial-gradient(circle at 24% 0%, rgba(255, 255, 255, 0.2), transparent 44%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.018)),
+    rgba(8, 14, 11, 0.26);
+}
+
+.main-nav a[aria-current="page"],
+.main-nav a:hover,
+.social-links a:not(.resume-link):hover,
+.social-links .resume-link:hover,
+.footer-links a:hover {
+  background:
+    radial-gradient(circle at 24% 0%, rgba(255, 255, 255, 0.22), transparent 44%),
+    linear-gradient(135deg, rgba(88, 255, 143, 0.18), rgba(255, 255, 255, 0.03)),
+    rgba(8, 32, 18, 0.38);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.34),
+    inset 0 -14px 24px rgba(0, 0, 0, 0.14),
+    0 12px 28px rgba(88, 255, 143, 0.12);
+}
+
+.button-primary,
+.button-deep-green,
+.back-link.button-ghost {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.22), transparent 42%),
+    linear-gradient(90deg, rgba(6, 59, 33, 0.64), rgba(10, 168, 83, 0.58)),
+    rgba(8, 30, 18, 0.48);
+}
+
+.button-ghost {
+  background:
+    radial-gradient(circle at 24% 0%, rgba(255, 255, 255, 0.18), transparent 42%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.015)),
+    rgba(8, 14, 11, 0.42);
+}
+
+.software-marquee,
+.contact-band,
+.about-media,
+.detail-media-wrap,
+.gallery-item,
+.art-card,
+.empty-gallery {
+  background:
+    radial-gradient(circle at 14% 0%, rgba(255, 255, 255, 0.16), transparent 30%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.012) 42%, rgba(88, 255, 143, 0.07)),
+    rgba(8, 14, 11, 0.42);
+}
+
+.project-card {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 255, 255, 0.13), transparent 28%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.012) 40%, rgba(88, 255, 143, 0.06)),
+    rgba(8, 13, 10, 0.42);
+}
+
+.software-chip,
+.project-software-badge,
+.project-card-meta span,
+.detail-meta-grid div,
+.about-facts div {
+  background:
+    radial-gradient(circle at 24% 0%, rgba(255, 255, 255, 0.16), transparent 42%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.014) 44%, rgba(88, 255, 143, 0.05)),
+    rgba(10, 18, 14, 0.4);
+}
+
+.about-facts,
+.detail-meta-grid {
+  gap: 0.65rem;
+  overflow: visible;
+  background: transparent;
+}
+
+.about-facts div,
+.detail-meta-grid div {
+  border-radius: var(--radius-sm);
+}
+
+.project-card-glow {
+  filter: none;
+  opacity: 0.58;
+}
+
 .art-placeholder {
   background:
     radial-gradient(circle at 24% 18%, rgba(88, 255, 143, 0.24), transparent 14rem),
