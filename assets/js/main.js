@@ -5,30 +5,6 @@ const pageName = window.location.pathname.split("/").pop() || "index.html";
 const navigationEntry = performance.getEntriesByType?.("navigation")?.[0];
 const isReloadNavigation =
   navigationEntry?.type === "reload" || performance.navigation?.type === 1;
-const liquidGlassSelector = [
-  ".topbar",
-  ".main-nav a",
-  ".social-links a:not(.resume-link)",
-  ".resume-link",
-  ".button",
-  ".software-marquee",
-  ".software-chip",
-  ".rail-arrow",
-  ".project-card",
-  ".project-software-badge",
-  ".project-card-meta span",
-  ".generated-visual span",
-  ".contact-band",
-  ".footer-links a",
-  ".about-facts div",
-  ".about-media",
-  ".detail-media-wrap",
-  ".detail-meta-grid div",
-  ".gallery-item",
-  ".project-detail-nav > a",
-  ".empty-gallery",
-  ".art-card",
-].join(",");
 
 history.scrollRestoration = "manual";
 
@@ -608,125 +584,6 @@ const setupLogoLoader = () => {
   }, 1150);
 };
 
-const setupLiquidLight = () => {
-  if (!window.matchMedia("(pointer: fine)").matches) return;
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-  const elements = Array.from(document.querySelectorAll(liquidGlassSelector));
-  if (!elements.length) return;
-
-  const visibleElements = new Set();
-  let pointerX = window.innerWidth * 0.5;
-  let pointerY = window.innerHeight * 0.25;
-  let frame = 0;
-
-  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
-
-  const observe = () => {
-    if (!("IntersectionObserver" in window)) {
-      elements.forEach((element) => visibleElements.add(element));
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            visibleElements.add(entry.target);
-          } else {
-            visibleElements.delete(entry.target);
-          }
-        });
-        requestUpdate();
-      },
-      { rootMargin: "180px" }
-    );
-
-    elements.forEach((element) => observer.observe(element));
-  };
-
-  const update = () => {
-    frame = 0;
-
-    visibleElements.forEach((element) => {
-      const rect = element.getBoundingClientRect();
-      if (!rect.width || !rect.height) return;
-
-      const x = clamp(((pointerX - rect.left) / rect.width) * 100, -35, 135);
-      const y = clamp(((pointerY - rect.top) / rect.height) * 100, -35, 135);
-      const topEdge = clamp((58 - y) / 74, 0, 1);
-      const rightEdge = clamp((x - 42) / 74, 0, 1);
-      const bottomEdge = clamp((y - 42) / 74, 0, 1);
-      const leftEdge = clamp((58 - x) / 74, 0, 1);
-      const edgeMax = Math.max(topEdge, rightEdge, bottomEdge, leftEdge);
-
-      const whiteEdge = (amount, base = 0.07, boost = 0.42) =>
-        `rgba(255, 255, 255, ${(base + amount * boost).toFixed(3)})`;
-      const greenEdge = `rgba(88, 255, 143, ${(0.04 + edgeMax * 0.14).toFixed(3)})`;
-      const lensStrength = clamp(Math.min(rect.width, rect.height) / 55, 2.4, 8);
-      const lensX = clamp(((50 - x) / 50) * lensStrength, -lensStrength, lensStrength);
-      const lensY = clamp(((50 - y) / 50) * lensStrength, -lensStrength, lensStrength);
-
-      element.style.setProperty("--light-x", `${x.toFixed(1)}%`);
-      element.style.setProperty("--light-y", `${y.toFixed(1)}%`);
-      element.style.setProperty("--edge-top-color", whiteEdge(topEdge, 0.1, 0.42));
-      element.style.setProperty("--edge-right-color", whiteEdge(rightEdge));
-      element.style.setProperty("--edge-bottom-color", whiteEdge(bottomEdge, 0.06, 0.32));
-      element.style.setProperty("--edge-left-color", whiteEdge(leftEdge));
-      element.style.setProperty("--edge-green-color", greenEdge);
-      element.style.setProperty("--lens-shift-x", `${lensX.toFixed(2)}px`);
-      element.style.setProperty("--lens-shift-y", `${lensY.toFixed(2)}px`);
-      element.style.setProperty("--lens-inverse-x", `${(-lensX * 0.62).toFixed(2)}px`);
-      element.style.setProperty("--lens-inverse-y", `${(-lensY * 0.62).toFixed(2)}px`);
-    });
-  };
-
-  const requestUpdate = () => {
-    if (frame) return;
-    frame = window.requestAnimationFrame(update);
-  };
-
-  observe();
-  requestUpdate();
-
-  window.addEventListener(
-    "pointermove",
-    (event) => {
-      pointerX = event.clientX;
-      pointerY = event.clientY;
-      requestUpdate();
-    },
-    { passive: true }
-  );
-
-  window.addEventListener("scroll", requestUpdate, { passive: true });
-  window.addEventListener("resize", requestUpdate);
-};
-
-const setupLiquidRefraction = () => {
-  const supportsBackdrop =
-    window.CSS?.supports?.("backdrop-filter", "blur(1px)") ||
-    window.CSS?.supports?.("-webkit-backdrop-filter", "blur(1px)") ||
-    window.CSS?.supports?.("backdrop-filter: blur(1px)") ||
-    window.CSS?.supports?.("-webkit-backdrop-filter: blur(1px)");
-
-  if (!supportsBackdrop) return;
-
-  document.querySelectorAll(liquidGlassSelector).forEach((element) => {
-    const alreadyHasLens = Array.from(element.children).some((child) =>
-      child.classList.contains("glass-lens")
-    );
-    if (alreadyHasLens) return;
-
-    element.classList.add("glass-refraction");
-
-    const lens = document.createElement("span");
-    lens.className = "glass-lens";
-    lens.setAttribute("aria-hidden", "true");
-    element.append(lens);
-  });
-};
-
 const setupCursor = () => {
   if (!window.matchMedia("(pointer: fine)").matches) return;
 
@@ -757,6 +614,4 @@ setupScrollMotion();
 setupProjectRailControls();
 setupAutoScroll();
 setupParticleField();
-setupLiquidRefraction();
-setupLiquidLight();
 setupCursor();
