@@ -5,6 +5,30 @@ const pageName = window.location.pathname.split("/").pop() || "index.html";
 const navigationEntry = performance.getEntriesByType?.("navigation")?.[0];
 const isReloadNavigation =
   navigationEntry?.type === "reload" || performance.navigation?.type === 1;
+const liquidGlassSelector = [
+  ".topbar",
+  ".main-nav a",
+  ".social-links a:not(.resume-link)",
+  ".resume-link",
+  ".button",
+  ".software-marquee",
+  ".software-chip",
+  ".rail-arrow",
+  ".project-card",
+  ".project-software-badge",
+  ".project-card-meta span",
+  ".generated-visual span",
+  ".contact-band",
+  ".footer-links a",
+  ".about-facts div",
+  ".about-media",
+  ".detail-media-wrap",
+  ".detail-meta-grid div",
+  ".gallery-item",
+  ".project-detail-nav > a",
+  ".empty-gallery",
+  ".art-card",
+].join(",");
 
 history.scrollRestoration = "manual";
 
@@ -588,32 +612,7 @@ const setupLiquidLight = () => {
   if (!window.matchMedia("(pointer: fine)").matches) return;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-  const selector = [
-    ".topbar",
-    ".main-nav a",
-    ".social-links a:not(.resume-link)",
-    ".resume-link",
-    ".button",
-    ".software-marquee",
-    ".software-chip",
-    ".rail-arrow",
-    ".project-card",
-    ".project-software-badge",
-    ".project-card-meta span",
-    ".generated-visual span",
-    ".contact-band",
-    ".footer-links a",
-    ".about-facts div",
-    ".about-media",
-    ".detail-media-wrap",
-    ".detail-meta-grid div",
-    ".gallery-item",
-    ".project-detail-nav > a",
-    ".empty-gallery",
-    ".art-card",
-  ].join(",");
-
-  const elements = Array.from(document.querySelectorAll(selector));
+  const elements = Array.from(document.querySelectorAll(liquidGlassSelector));
   if (!elements.length) return;
 
   const visibleElements = new Set();
@@ -664,6 +663,9 @@ const setupLiquidLight = () => {
       const whiteEdge = (amount, base = 0.07, boost = 0.42) =>
         `rgba(255, 255, 255, ${(base + amount * boost).toFixed(3)})`;
       const greenEdge = `rgba(88, 255, 143, ${(0.04 + edgeMax * 0.14).toFixed(3)})`;
+      const lensStrength = clamp(Math.min(rect.width, rect.height) / 55, 2.4, 8);
+      const lensX = clamp(((50 - x) / 50) * lensStrength, -lensStrength, lensStrength);
+      const lensY = clamp(((50 - y) / 50) * lensStrength, -lensStrength, lensStrength);
 
       element.style.setProperty("--light-x", `${x.toFixed(1)}%`);
       element.style.setProperty("--light-y", `${y.toFixed(1)}%`);
@@ -672,6 +674,10 @@ const setupLiquidLight = () => {
       element.style.setProperty("--edge-bottom-color", whiteEdge(bottomEdge, 0.06, 0.32));
       element.style.setProperty("--edge-left-color", whiteEdge(leftEdge));
       element.style.setProperty("--edge-green-color", greenEdge);
+      element.style.setProperty("--lens-shift-x", `${lensX.toFixed(2)}px`);
+      element.style.setProperty("--lens-shift-y", `${lensY.toFixed(2)}px`);
+      element.style.setProperty("--lens-inverse-x", `${(-lensX * 0.62).toFixed(2)}px`);
+      element.style.setProperty("--lens-inverse-y", `${(-lensY * 0.62).toFixed(2)}px`);
     });
   };
 
@@ -695,6 +701,30 @@ const setupLiquidLight = () => {
 
   window.addEventListener("scroll", requestUpdate, { passive: true });
   window.addEventListener("resize", requestUpdate);
+};
+
+const setupLiquidRefraction = () => {
+  const supportsBackdrop =
+    window.CSS?.supports?.("backdrop-filter", "blur(1px)") ||
+    window.CSS?.supports?.("-webkit-backdrop-filter", "blur(1px)") ||
+    window.CSS?.supports?.("backdrop-filter: blur(1px)") ||
+    window.CSS?.supports?.("-webkit-backdrop-filter: blur(1px)");
+
+  if (!supportsBackdrop) return;
+
+  document.querySelectorAll(liquidGlassSelector).forEach((element) => {
+    const alreadyHasLens = Array.from(element.children).some((child) =>
+      child.classList.contains("glass-lens")
+    );
+    if (alreadyHasLens) return;
+
+    element.classList.add("glass-refraction");
+
+    const lens = document.createElement("span");
+    lens.className = "glass-lens";
+    lens.setAttribute("aria-hidden", "true");
+    element.append(lens);
+  });
 };
 
 const setupCursor = () => {
@@ -727,5 +757,6 @@ setupScrollMotion();
 setupProjectRailControls();
 setupAutoScroll();
 setupParticleField();
+setupLiquidRefraction();
 setupLiquidLight();
 setupCursor();

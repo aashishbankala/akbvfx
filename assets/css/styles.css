@@ -34,6 +34,10 @@
   --edge-bottom-color: rgba(255, 255, 255, 0.08);
   --edge-left-color: rgba(255, 255, 255, 0.1);
   --edge-green-color: rgba(88, 255, 143, 0.08);
+  --lens-shift-x: 0px;
+  --lens-shift-y: 0px;
+  --lens-inverse-x: 0px;
+  --lens-inverse-y: 0px;
   --scroll-progress: 0;
   --background-glow: 0;
 }
@@ -114,6 +118,91 @@ body::before {
 .art-card {
   -webkit-backdrop-filter: saturate(1.35) contrast(1.08) brightness(1.04) blur(1px);
   backdrop-filter: saturate(1.35) contrast(1.08) brightness(1.04) blur(1px);
+}
+
+.glass-refraction {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.glass-lens {
+  position: absolute;
+  inset: -10px;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    radial-gradient(ellipse at var(--light-x, 24%) var(--light-y, 0%), rgba(255, 255, 255, 0.16), transparent 22%),
+    linear-gradient(118deg, transparent 0 25%, rgba(255, 255, 255, 0.12) 34%, transparent 43% 58%, rgba(88, 255, 143, 0.08) 68%, transparent 78%),
+    linear-gradient(18deg, transparent 0 45%, rgba(255, 255, 255, 0.055) 51%, transparent 58%);
+  opacity: 0.54;
+  transform: translate3d(var(--lens-shift-x), var(--lens-shift-y), 0) scale(1.045);
+  transform-origin: var(--light-x, 50%) var(--light-y, 50%);
+  -webkit-backdrop-filter: saturate(1.95) contrast(1.34) brightness(1.18) blur(0.15px);
+  backdrop-filter: saturate(1.95) contrast(1.34) brightness(1.18) blur(0.15px);
+  mix-blend-mode: screen;
+}
+
+.glass-lens::before,
+.glass-lens::after {
+  position: absolute;
+  pointer-events: none;
+  content: "";
+  border-radius: inherit;
+}
+
+.glass-lens::before {
+  inset: 7px;
+  background:
+    linear-gradient(96deg, transparent 0 18%, rgba(255, 255, 255, 0.22) 27%, transparent 38% 58%, rgba(255, 255, 255, 0.1) 70%, transparent 82%),
+    radial-gradient(ellipse at calc(var(--light-x, 50%) + 10%) calc(var(--light-y, 50%) + 8%), rgba(88, 255, 143, 0.12), transparent 26%);
+  opacity: 0.42;
+  transform: translate3d(var(--lens-inverse-x), var(--lens-inverse-y), 0) scale(0.985);
+  -webkit-backdrop-filter: saturate(2.1) contrast(1.42) brightness(1.22) blur(0.3px);
+  backdrop-filter: saturate(2.1) contrast(1.42) brightness(1.22) blur(0.3px);
+  -webkit-mask-image: linear-gradient(112deg, transparent 0 16%, black 25% 38%, transparent 49% 61%, black 70% 82%, transparent 92%);
+  mask-image: linear-gradient(112deg, transparent 0 16%, black 25% 38%, transparent 49% 61%, black 70% 82%, transparent 92%);
+}
+
+.glass-lens::after {
+  inset: 2px;
+  box-shadow:
+    inset 2px 2px 2px rgba(255, 255, 255, 0.34),
+    inset -4px -5px 9px rgba(0, 0, 0, 0.2),
+    inset -1px 0 2px rgba(88, 255, 143, 0.16);
+  opacity: 0.6;
+}
+
+.button .glass-lens,
+.main-nav a .glass-lens,
+.social-links a .glass-lens,
+.resume-link .glass-lens,
+.footer-links a .glass-lens,
+.project-card-meta span .glass-lens,
+.project-software-badge .glass-lens,
+.software-chip .glass-lens {
+  inset: -6px;
+  opacity: 0.44;
+  transform: translate3d(var(--lens-shift-x), var(--lens-shift-y), 0) scale(1.08);
+}
+
+.topbar > :not(.glass-lens),
+.contact-band > :not(.glass-lens),
+.project-card-content,
+.project-software-badge,
+.project-card-meta span > :not(.glass-lens),
+.detail-meta-grid div > :not(.glass-lens),
+.about-facts div > :not(.glass-lens),
+.footer-links a > :not(.glass-lens),
+.button > :not(.glass-lens) {
+  position: relative;
+  z-index: 2;
+}
+
+.project-card .glass-lens {
+  z-index: 1;
+  opacity: 0.48;
 }
 
 .site-shell {
