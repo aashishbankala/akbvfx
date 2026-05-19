@@ -584,6 +584,104 @@ const setupLogoLoader = () => {
   }, 1150);
 };
 
+const setupLiquidLight = () => {
+  if (!window.matchMedia("(pointer: fine)").matches) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const selector = [
+    ".topbar",
+    ".main-nav a",
+    ".social-links a:not(.resume-link)",
+    ".resume-link",
+    ".button",
+    ".software-marquee",
+    ".software-chip",
+    ".rail-arrow",
+    ".project-card",
+    ".project-software-badge",
+    ".project-card-meta span",
+    ".generated-visual span",
+    ".contact-band",
+    ".footer-links a",
+    ".about-facts div",
+    ".about-media",
+    ".detail-media-wrap",
+    ".detail-meta-grid div",
+    ".gallery-item",
+    ".project-detail-nav > a",
+    ".empty-gallery",
+    ".art-card",
+  ].join(",");
+
+  const elements = Array.from(document.querySelectorAll(selector));
+  if (!elements.length) return;
+
+  const visibleElements = new Set();
+  let pointerX = window.innerWidth * 0.5;
+  let pointerY = window.innerHeight * 0.25;
+  let frame = 0;
+
+  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+  const observe = () => {
+    if (!("IntersectionObserver" in window)) {
+      elements.forEach((element) => visibleElements.add(element));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            visibleElements.add(entry.target);
+          } else {
+            visibleElements.delete(entry.target);
+          }
+        });
+        requestUpdate();
+      },
+      { rootMargin: "180px" }
+    );
+
+    elements.forEach((element) => observer.observe(element));
+  };
+
+  const update = () => {
+    frame = 0;
+
+    visibleElements.forEach((element) => {
+      const rect = element.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+
+      const x = clamp(((pointerX - rect.left) / rect.width) * 100, -35, 135);
+      const y = clamp(((pointerY - rect.top) / rect.height) * 100, -35, 135);
+      element.style.setProperty("--light-x", `${x.toFixed(1)}%`);
+      element.style.setProperty("--light-y", `${y.toFixed(1)}%`);
+    });
+  };
+
+  const requestUpdate = () => {
+    if (frame) return;
+    frame = window.requestAnimationFrame(update);
+  };
+
+  observe();
+  requestUpdate();
+
+  window.addEventListener(
+    "pointermove",
+    (event) => {
+      pointerX = event.clientX;
+      pointerY = event.clientY;
+      requestUpdate();
+    },
+    { passive: true }
+  );
+
+  window.addEventListener("scroll", requestUpdate, { passive: true });
+  window.addEventListener("resize", requestUpdate);
+};
+
 const setupCursor = () => {
   if (!window.matchMedia("(pointer: fine)").matches) return;
 
@@ -614,4 +712,5 @@ setupScrollMotion();
 setupProjectRailControls();
 setupAutoScroll();
 setupParticleField();
+setupLiquidLight();
 setupCursor();

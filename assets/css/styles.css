@@ -27,6 +27,8 @@
   --section-space: clamp(5.5rem, 7vw, 7.25rem);
   --section-space-tight: clamp(3rem, 5vw, 5rem);
   --block-gap: clamp(1.8rem, 2.4vw, 2.6rem);
+  --light-x: 24%;
+  --light-y: 0%;
   --scroll-progress: 0;
   --background-glow: 0;
 }
@@ -513,7 +515,7 @@ svg {
   border-radius: inherit;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.02) 42%, rgba(88, 255, 143, 0.08)),
-    radial-gradient(circle at 20% 0%, rgba(255, 255, 255, 0.24), transparent 42%);
+    radial-gradient(circle at var(--light-x, 20%) var(--light-y, 0%), rgba(255, 255, 255, 0.24), transparent 42%);
   opacity: 0.62;
 }
 
@@ -1521,7 +1523,7 @@ svg {
 .topbar-solid {
   background:
     linear-gradient(90deg, rgba(10, 168, 83, 0.48) 0%, rgba(6, 47, 27, 0.34) 22%, rgba(3, 4, 3, 0.42) 43%, rgba(3, 4, 3, 0.42) 57%, rgba(6, 47, 27, 0.34) 78%, rgba(10, 168, 83, 0.48) 100%),
-    radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.2), transparent 32%),
+    radial-gradient(circle at var(--light-x, 18%) var(--light-y, 0%), rgba(255, 255, 255, 0.2), transparent 32%),
     radial-gradient(circle at 82% 100%, rgba(88, 255, 143, 0.12), transparent 34%),
     rgba(8, 14, 11, 0.44);
 }
@@ -1531,7 +1533,7 @@ svg {
 .resume-link,
 .footer-links a {
   background:
-    radial-gradient(circle at 24% 0%, rgba(255, 255, 255, 0.2), transparent 44%),
+    radial-gradient(circle at var(--light-x, 24%) var(--light-y, 0%), rgba(255, 255, 255, 0.2), transparent 44%),
     linear-gradient(135deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.018)),
     rgba(8, 14, 11, 0.26);
 }
@@ -1542,7 +1544,7 @@ svg {
 .social-links .resume-link:hover,
 .footer-links a:hover {
   background:
-    radial-gradient(circle at 24% 0%, rgba(255, 255, 255, 0.22), transparent 44%),
+    radial-gradient(circle at var(--light-x, 24%) var(--light-y, 0%), rgba(255, 255, 255, 0.22), transparent 44%),
     linear-gradient(135deg, rgba(88, 255, 143, 0.18), rgba(255, 255, 255, 0.03)),
     rgba(8, 32, 18, 0.38);
   box-shadow:
@@ -1555,14 +1557,14 @@ svg {
 .button-deep-green,
 .back-link.button-ghost {
   background:
-    radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.22), transparent 42%),
+    radial-gradient(circle at var(--light-x, 18%) var(--light-y, 0%), rgba(255, 255, 255, 0.22), transparent 42%),
     linear-gradient(90deg, rgba(6, 59, 33, 0.64), rgba(10, 168, 83, 0.58)),
     rgba(8, 30, 18, 0.48);
 }
 
 .button-ghost {
   background:
-    radial-gradient(circle at 24% 0%, rgba(255, 255, 255, 0.18), transparent 42%),
+    radial-gradient(circle at var(--light-x, 24%) var(--light-y, 0%), rgba(255, 255, 255, 0.18), transparent 42%),
     linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.015)),
     rgba(8, 14, 11, 0.42);
 }
@@ -1575,14 +1577,14 @@ svg {
 .art-card,
 .empty-gallery {
   background:
-    radial-gradient(circle at 14% 0%, rgba(255, 255, 255, 0.16), transparent 30%),
+    radial-gradient(circle at var(--light-x, 14%) var(--light-y, 0%), rgba(255, 255, 255, 0.16), transparent 30%),
     linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.012) 42%, rgba(88, 255, 143, 0.07)),
     rgba(8, 14, 11, 0.42);
 }
 
 .project-card {
   background:
-    radial-gradient(circle at 12% 0%, rgba(255, 255, 255, 0.13), transparent 28%),
+    radial-gradient(circle at var(--light-x, 12%) var(--light-y, 0%), rgba(255, 255, 255, 0.13), transparent 28%),
     linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.012) 40%, rgba(88, 255, 143, 0.06)),
     rgba(8, 13, 10, 0.42);
 }
@@ -1593,7 +1595,7 @@ svg {
 .detail-meta-grid div,
 .about-facts div {
   background:
-    radial-gradient(circle at 24% 0%, rgba(255, 255, 255, 0.16), transparent 42%),
+    radial-gradient(circle at var(--light-x, 24%) var(--light-y, 0%), rgba(255, 255, 255, 0.16), transparent 42%),
     linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.014) 44%, rgba(88, 255, 143, 0.05)),
     rgba(10, 18, 14, 0.4);
 }
