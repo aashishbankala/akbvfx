@@ -2,7 +2,7 @@ window.AKBVFX_PROJECTS = [
   {
     slug: "unreal-one-last-time-cybercity",
     title: "One Last Time: Cyber City",
-    kicker: "Unreal Engine / Cinematic Environment",
+    kicker: "UE / Cinematic Environment / Concept Trailer",
     date: "2026",
     role: "Environment Artist",
     software: ["Unreal Engine"],
@@ -22,11 +22,11 @@ window.AKBVFX_PROJECTS = [
   {
     slug: "maya-swedish-bar",
     title: "Swedish Bar Environment",
-    kicker: "Maya / Environment Modeling",
+    kicker: "Orthographic / Animated 3D Environment / Custom Built",
     date: "2026",
-    role: "CG Artist",
-    software: ["Maya"],
-    renderer: "Maya Viewport",
+    role: "LookDev, Modeling, UVs, Texturing, Assembly, Animation, Rendering",
+    software: ["Maya", "Substance Painter"],
+    renderer: "Arnold",
     coverType: "video",
     cover: "assets/media/projects/maya-swedish-bar.mp4",
     description:
@@ -41,12 +41,12 @@ window.AKBVFX_PROJECTS = [
   },
   {
     slug: "houdini-procedural-texturing-programming",
-    title: "Procedural Texturing Study",
-    kicker: "Houdini / Texturing / Programming",
+    title: "Procedural Texturing",
+    kicker: "Houdini COPs & VEX / Nuke AOVs",
     date: "2026",
     role: "Procedural Artist",
-    software: ["Houdini"],
-    renderer: "Houdini Viewport",
+    software: ["Houdini", "Nuke"],
+    renderer: "Karma XPU",
     coverType: "video",
     cover: "assets/media/projects/houdini-procedural-texturing-programming.mp4",
     description:
@@ -62,11 +62,11 @@ window.AKBVFX_PROJECTS = [
   {
     slug: "houdini-procedural-building",
     title: "Procedural Building System",
-    kicker: "Houdini / Procedural Modeling",
+    kicker: "Houdini HScript / Procedural Building",
     date: "2026",
     role: "Procedural Artist",
     software: ["Houdini"],
-    renderer: "Houdini Viewport",
+    renderer: "Karma CPU Mplay",
     coverType: "video",
     cover: "assets/media/projects/houdini-procedural-building.mp4",
     description:
@@ -80,9 +80,29 @@ window.AKBVFX_PROJECTS = [
     ],
   },
   {
+    slug: "houdini-venom-tendrils",
+    title: "Venom Tendrils",
+    kicker: "Houdini / Procedural Animation / Tendrils",
+    date: "2026",
+    role: "Procedural FX Artist",
+    software: ["Houdini"],
+    renderer: "Karma XPU",
+    coverType: "video",
+    cover: "assets/media/projects/houdini-venom-tendrils.mp4",
+    description:
+      "A Houdini procedural animation study built around Venom-inspired tendril motion, organic growth, and controllable FX behavior. The project focuses on animated form, timing, and procedural setup design, rendered in Karma XPU.",
+    gallery: [
+      {
+        type: "video",
+        src: "assets/media/projects/houdini-venom-tendrils.mp4",
+        caption: "Venom tendrils procedural animation preview.",
+      },
+    ],
+  },
+  {
     slug: "unreal-aliens-lookdev",
     title: "Aliens Look Dev",
-    kicker: "Unreal Engine / Creature Lookdev",
+    kicker: "UE / Environment Concept / Tone / Lookdev",
     date: "2026",
     role: "Lookdev Artist",
     software: ["Unreal Engine"],
@@ -101,25 +121,39 @@ window.AKBVFX_PROJECTS = [
   },
   {
     slug: "showreel-2026",
-    title: "VFX Showreel 2026",
-    kicker: "Compositing / FX / CG Integration",
+    title: "VFX Demoreel 2026",
+    kicker: "Selected Works",
     date: "2026",
     role: "VFX Artist",
-    software: ["Houdini", "Nuke", "Maya", "Blender"],
+    software: ["Maya", "Substance Painter", "Houdini", "Nuke", "Cinema 4D", "Premiere Pro"],
     renderer: "Arnold / Redshift / Karma",
     coverType: "video",
     cover: "assets/media/showreel.mp4",
     description:
-      "A curated showreel landing piece for Aashish Kumar Bankala, bringing together compositing, FX, CG integration, and cinematic VFX work in one main reel.",
+      "A curated demoreel landing piece for Aashish Kumar Bankala, bringing together Maya, Substance Painter, Houdini, Nuke, Cinema 4D, and Premiere Pro work across compositing, FX, CG integration, and cinematic VFX presentation.",
     gallery: [
       {
         type: "video",
         src: "assets/media/showreel.mp4",
-        caption: "Full showreel playback.",
+        caption: "Full demoreel playback.",
       },
     ],
   },
 ];
+
+const projectDisplayOrder = [
+  "unreal-one-last-time-cybercity",
+  "houdini-venom-tendrils",
+  "houdini-procedural-texturing-programming",
+  "maya-swedish-bar",
+  "houdini-procedural-building",
+  "unreal-aliens-lookdev",
+  "showreel-2026",
+];
+
+window.AKBVFX_PROJECTS.sort(
+  (a, b) => projectDisplayOrder.indexOf(a.slug) - projectDisplayOrder.indexOf(b.slug)
+);
 
 window.AKBVFX_SOFTWARE = [
   {

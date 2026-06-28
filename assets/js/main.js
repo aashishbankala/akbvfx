@@ -33,40 +33,56 @@ const createMedia = (project, className = "project-media") => {
 };
 
 const normalizeSoftwareName = (name = "") => name.toLowerCase().replace(/[^a-z0-9]/g, "");
+const formatProjectTitle = (title = "") => title.replace(/:\s+/g, ":<br />");
 
-const getSoftwareLogo = (project) => {
+const getSoftwareLogos = (project) => {
   const projectSoftware = project.software || [];
+  const seen = new Set();
 
   return projectSoftware
     .map((name) => {
       const normalized = normalizeSoftwareName(name);
       return software.find((item) => normalizeSoftwareName(item.name) === normalized);
     })
-    .find(Boolean);
+    .filter(Boolean)
+    .filter((item) => {
+      const normalized = normalizeSoftwareName(item.name);
+      if (seen.has(normalized)) return false;
+      seen.add(normalized);
+      return true;
+    });
 };
 
-const projectSoftwareBadge = (project) => {
-  const item = getSoftwareLogo(project);
-  if (!item) return "";
+const projectSoftwareBadges = (project) => {
+  const items = getSoftwareLogos(project);
+  if (!items.length) return "";
 
   return `
-    <span class="project-software-badge" title="${item.name}">
-      <img src="${item.logo}" alt="${item.name} logo" loading="lazy" />
+    <span class="project-software-badges" aria-label="${items.map((item) => item.name).join(", ")}">
+      ${items
+        .map(
+          (item) => `
+            <span class="project-software-badge" title="${item.name}">
+              <img src="${item.logo}" alt="${item.name} logo" loading="lazy" />
+            </span>
+          `
+        )
+        .join("")}
     </span>
   `;
 };
 
 const projectCard = (project) => `
-  <a class="project-card" href="project.html?slug=${project.slug}" aria-label="Open ${project.title}">
+  <a class="project-card" data-project="${project.slug}" href="project.html?slug=${project.slug}" aria-label="Open ${project.title}">
     ${createMedia(project)}
-    ${projectSoftwareBadge(project)}
+    ${projectSoftwareBadges(project)}
     <span class="project-card-glow"></span>
     <div class="project-card-content">
       <p>${project.kicker}</p>
       <h3>${project.title}</h3>
       <div class="project-card-meta">
         <span>${project.date}</span>
-        <span>${project.software.slice(0, 3).join(" / ")}</span>
+        <span>${project.software.join(" / ")}</span>
       </div>
     </div>
   </a>
@@ -116,42 +132,134 @@ const renderArtworkGrid = () => {
   if (!grid) return;
 
   grid.innerHTML = artwork
-    .map((item) => {
+    .map((item, index) => {
       const ratio = item.ratio || "4 / 5";
+      const label = `Open ${item.title}`;
+      const layoutClass = item.layout ? ` art-${item.layout}` : "";
 
       if (item.type === "image") {
         return `
-          <figure class="art-card" style="--art-ratio: ${ratio}">
-            <img src="${item.src}" alt="${item.title}" loading="lazy" />
-            <figcaption>${item.title}</figcaption>
-          </figure>
+          <a class="art-card${layoutClass}" href="${item.src}" style="--art-ratio: ${ratio}; --art-delay: ${Math.min(index % 6, 5) * 34}ms" data-art-index="${index}" data-reveal aria-label="${label}">
+            <img src="${item.src}" alt="${item.title}" loading="lazy" decoding="async" />
+            <span class="art-card-caption">${item.title}</span>
+          </a>
         `;
       }
 
       if (item.type === "video") {
         return `
-          <figure class="art-card" style="--art-ratio: ${ratio}">
+          <a class="art-card${layoutClass}" href="${item.src}" style="--art-ratio: ${ratio}; --art-delay: ${Math.min(index % 6, 5) * 34}ms" data-art-index="${index}" data-reveal aria-label="${label}">
             <video src="${item.src}" autoplay muted loop playsinline></video>
-            <figcaption>${item.title}</figcaption>
-          </figure>
+            <span class="art-card-caption">${item.title}</span>
+          </a>
         `;
       }
 
       return `
-        <figure class="art-card" style="--art-ratio: ${ratio}">
+        <a class="art-card${layoutClass}" href="#" style="--art-ratio: ${ratio}; --art-delay: ${Math.min(index % 6, 5) * 34}ms" data-art-index="${index}" data-reveal aria-label="${label}">
           <div class="art-placeholder ${item.visualClass || ""}"></div>
-          <figcaption>${item.title}</figcaption>
-        </figure>
+          <span class="art-card-caption">${item.title}</span>
+        </a>
       `;
     })
     .join("");
+};
+
+const setupArtworkLightbox = () => {
+  const grid = document.querySelector("#artworkGrid");
+  if (!grid || !artwork.length) return;
+
+  let activeIndex = 0;
+
+  const lightbox = document.createElement("div");
+  lightbox.className = "art-lightbox";
+  lightbox.setAttribute("aria-hidden", "true");
+  lightbox.innerHTML = `
+    <button class="art-lightbox-close" type="button" aria-label="Close artwork preview">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6.4 5 19 17.6 17.6 19 5 6.4 6.4 5Zm11.2 0L19 6.4 6.4 19 5 17.6 17.6 5Z" />
+      </svg>
+    </button>
+    <button class="rail-arrow art-lightbox-arrow art-lightbox-prev" type="button" aria-label="Previous artwork">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M14.8 5 8 12l6.8 7 1.4-1.42L10.8 12l5.4-5.58L14.8 5Z" />
+      </svg>
+    </button>
+    <figure class="art-lightbox-frame">
+      <img src="" alt="" />
+      <figcaption></figcaption>
+    </figure>
+    <button class="rail-arrow art-lightbox-arrow art-lightbox-next" type="button" aria-label="Next artwork">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="m9.2 19 6.8-7-6.8-7-1.4 1.42L13.2 12l-5.4 5.58L9.2 19Z" />
+      </svg>
+    </button>
+  `;
+  document.body.appendChild(lightbox);
+
+  const image = lightbox.querySelector("img");
+  const caption = lightbox.querySelector("figcaption");
+  const closeButton = lightbox.querySelector(".art-lightbox-close");
+  const previousButton = lightbox.querySelector(".art-lightbox-prev");
+  const nextButton = lightbox.querySelector(".art-lightbox-next");
+
+  const showArtwork = (index) => {
+    activeIndex = (index + artwork.length) % artwork.length;
+    const item = artwork[activeIndex];
+    image.src = item.src;
+    image.alt = item.title;
+    caption.textContent = item.title;
+  };
+
+  const openArtwork = (index) => {
+    showArtwork(index);
+    lightbox.classList.add("is-open");
+    lightbox.setAttribute("aria-hidden", "false");
+    document.body.classList.add("has-art-lightbox");
+    closeButton.focus({ preventScroll: true });
+  };
+
+  const closeArtwork = () => {
+    lightbox.classList.remove("is-open");
+    lightbox.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("has-art-lightbox");
+    image.removeAttribute("src");
+  };
+
+  grid.addEventListener("click", (event) => {
+    const card = event.target.closest("[data-art-index]");
+    if (!card) return;
+
+    event.preventDefault();
+    openArtwork(Number(card.getAttribute("data-art-index")) || 0);
+  });
+
+  previousButton.addEventListener("click", () => showArtwork(activeIndex - 1));
+  nextButton.addEventListener("click", () => showArtwork(activeIndex + 1));
+  closeButton.addEventListener("click", closeArtwork);
+
+  lightbox.addEventListener("click", (event) => {
+    const interactiveElement = event.target.closest(
+      ".art-lightbox-frame img, .art-lightbox-arrow, .art-lightbox-close"
+    );
+
+    if (!interactiveElement) closeArtwork();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (!lightbox.classList.contains("is-open")) return;
+
+    if (event.key === "Escape") closeArtwork();
+    if (event.key === "ArrowLeft") showArtwork(activeIndex - 1);
+    if (event.key === "ArrowRight") showArtwork(activeIndex + 1);
+  });
 };
 
 const renderGalleryItem = (item) => {
   if (item.type === "video") {
     return `
       <figure class="gallery-item">
-        <video src="${item.src}" controls playsinline></video>
+        <video src="${item.src}" autoplay muted loop controls playsinline preload="metadata"></video>
         <figcaption>${item.caption}</figcaption>
       </figure>
     `;
@@ -183,7 +291,7 @@ const renderProjectDetail = () => {
     detail.innerHTML = `
       <section class="page-hero" data-reveal>
         <p class="eyebrow">Project not found</p>
-        <h1>This project is not in the CMS data yet.</h1>
+        <h1>This project is not available yet.</h1>
         <a class="button button-primary" href="projects.html">Back to Projects</a>
       </section>
     `;
@@ -198,7 +306,7 @@ const renderProjectDetail = () => {
         <div class="detail-copy">
           <a class="button button-ghost back-link" href="projects.html">Back to Projects</a>
           <p class="eyebrow">${project.kicker}</p>
-          <h1>${project.title}</h1>
+          <h1>${formatProjectTitle(project.title)}</h1>
           <p>${project.description}</p>
         </div>
         <div class="detail-media-wrap">
@@ -228,13 +336,13 @@ const renderProjectDetail = () => {
       <section class="detail-gallery" data-reveal>
         <div class="section-heading">
           <p class="eyebrow">Project Media</p>
-          <h2>Preview, process, and breakdown material.</h2>
+          <h2>Final previews, process captures, and breakdown material.</h2>
         </div>
         ${
           project.gallery.length
             ? `<div class="gallery-grid">${project.gallery.map(renderGalleryItem).join("")}</div>`
             : `<div class="empty-gallery">
-                <p>Add behind-the-scenes images, screenshots, or breakdown videos in <strong>assets/js/projects.js</strong>.</p>
+                <p>Additional behind-the-scenes media will appear here when it is ready for this project.</p>
               </div>`
         }
       </section>
@@ -310,8 +418,10 @@ const setupScrollMotion = () => {
     const height = Math.max(window.innerHeight, 1);
     const amount = Math.min(window.scrollY / height, 1.6);
     const glow = Math.min(Math.max((window.scrollY - height * 0.82) / (height * 0.42), 0), 1);
+    const navFade = Math.min(Math.max((window.scrollY - 72) / 72, 0), 1);
     root.style.setProperty("--scroll-progress", amount.toFixed(3));
     root.style.setProperty("--background-glow", glow.toFixed(3));
+    root.style.setProperty("--nav-fade-opacity", navFade.toFixed(3));
   };
 
   window.addEventListener(
@@ -584,29 +694,12 @@ const setupLogoLoader = () => {
   }, 1150);
 };
 
-const setupCursor = () => {
-  if (!window.matchMedia("(pointer: fine)").matches) return;
-
-  const cursor = document.createElement("div");
-  cursor.className = "cursor-dot";
-  document.body.appendChild(cursor);
-  document.body.classList.add("has-custom-cursor");
-
-  window.addEventListener("pointermove", (event) => {
-    cursor.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0) translate(-50%, -50%)`;
-    cursor.classList.add("is-visible");
-  });
-
-  window.addEventListener("pointerdown", () => cursor.classList.add("is-pressed"));
-  window.addEventListener("pointerup", () => cursor.classList.remove("is-pressed"));
-  window.addEventListener("pointerleave", () => cursor.classList.remove("is-visible"));
-};
-
 setupLogoLoader();
 renderSoftware();
 renderHomeProjects();
 renderProjectsGrid();
 renderArtworkGrid();
+setupArtworkLightbox();
 renderProjectDetail();
 setupVideoControls();
 setupReveal();
@@ -614,4 +707,3 @@ setupScrollMotion();
 setupProjectRailControls();
 setupAutoScroll();
 setupParticleField();
-setupCursor();

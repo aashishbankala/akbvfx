@@ -5,12 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="AKB VFX portfolio for Aashish Kumar Bankala, featuring a showreel, project breakdowns, software, resume, and contact links."
+      content="AKB VFX portfolio for Aashish Kumar Bankala, featuring a demoreel, project breakdowns, software, resume, and contact links."
     />
     <title>AKB VFX | Aashish Kumar Bankala</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400..900&family=Montserrat:wght@400..900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="assets/css/styles.css" />
   </head>
-  <body data-prototype="prototype2">
+  <body>
     <div class="site-shell">
       <header class="topbar" data-reveal>
         <a class="brand" href="index.html" aria-label="AKB VFX home">
@@ -22,7 +25,7 @@
         </a>
 
         <nav class="main-nav" aria-label="Primary navigation">
-          <a href="#showreel" aria-current="page">Reel</a>
+          <a href="#showreel" aria-current="page">Demo Reel</a>
           <a href="projects.html">Projects</a>
           <a href="artwork.html">Artwork</a>
           <a href="about.html">About</a>
@@ -49,7 +52,7 @@
       </header>
 
       <main>
-        <section class="hero" id="showreel" aria-label="Showreel hero">
+        <section class="hero" id="showreel" aria-label="Demo reel hero">
           <video
             class="hero-video"
             id="heroVideo"
@@ -61,12 +64,12 @@
           ></video>
           <div class="hero-scrim"></div>
           <div class="hero-grid"></div>
-          <a class="hero-video-link" href="project.html?slug=showreel-2026" aria-label="Open showreel project"></a>
+          <a class="hero-video-link" href="project.html?slug=showreel-2026" aria-label="Open demo reel project"></a>
 
           <div class="hero-content" data-reveal>
-            <a class="hero-title-link" href="project.html?slug=showreel-2026" aria-label="Open showreel project">
+            <a class="hero-title-link" href="project.html?slug=showreel-2026" aria-label="Open demo reel project">
               <h1>
-                <span>Showreel</span>
+                <span>Demo Reel</span>
               </h1>
             </a>
             <div class="hero-actions">
@@ -85,8 +88,8 @@
 
         <section class="section project-section" id="featured-projects">
           <div class="section-heading" data-reveal>
-            <p class="eyebrow">Selected Work</p>
-            <h2>Auto-scrolling project cards linked directly to each project page.</h2>
+            <p class="eyebrow">Work</p>
+            <h2>More Projects</h2>
           </div>
           <div class="project-rail-shell" data-reveal>
             <button class="rail-arrow rail-arrow-left" type="button" data-project-nudge="-1" aria-label="Catch projects scrolling left">
@@ -107,31 +110,18 @@
 
         <section class="section software-section" id="software" aria-label="Software">
           <div class="section-heading" data-reveal>
-            <p class="eyebrow">Pipeline</p>
-            <h2>Software stack built as a smooth horizontal strip.</h2>
+            <p class="eyebrow">Pipeline Tools</p>
+            <h2>Proficient in Industry-Standard Software</h2>
           </div>
           <div class="software-marquee" data-reveal>
             <div class="software-track" id="softwareTrack"></div>
           </div>
         </section>
 
-        <section class="section intro-section">
-          <div class="section-heading" data-reveal>
-            <p class="eyebrow">Identity</p>
-            <h2>AKB VFX is short, sharp, and easier to remember.</h2>
-          </div>
-          <div class="intro-copy" data-reveal>
-            <p>
-              The site uses AKB VFX as the portfolio brand while keeping your full name visible for
-              recruiters, studios, and clients.
-            </p>
-          </div>
-        </section>
-
         <section class="section contact-band" id="contact" data-reveal>
           <div>
             <p class="eyebrow">Available For</p>
-            <h2>VFX, compositing, CG, and reel review conversations.</h2>
+            <h2>VFX, Modeling, Texturing, Procedural Workflow, Unreal Real-Time 3D Artist.</h2>
           </div>
           <div class="contact-actions">
             <a class="button button-primary" href="mailto:aashishbankala@gmail.com">Email Me</a>
@@ -142,10 +132,15 @@
 
       <footer class="site-footer" data-reveal>
         <div class="footer-main">
-          <div>
-            <p class="eyebrow">Contact</p>
-            <h2>AKB VFX</h2>
-            <p>Aashish Kumar Bankala · VFX artist focused on compositing, FX, CG integration, and cinematic portfolio work.</p>
+          <div class="footer-brand-block">
+            <a class="footer-logo" href="index.html#showreel" aria-label="Back to demoreel">
+              <img src="assets/images/logo-green.png" alt="AKB VFX logo" />
+            </a>
+            <div class="footer-copy">
+              <p class="eyebrow">Contact</p>
+              <h2>AKB VFX</h2>
+              <p>Aashish Kumar Bankala · VFX artist focused on compositing, FX, CG integration, and cinematic portfolio work.</p>
+            </div>
           </div>
           <nav class="footer-links" aria-label="Footer links">
             <a href="mailto:aashishbankala@gmail.com">Email</a>
