@@ -357,7 +357,7 @@ const renderProjectDetail = () => {
                 <span>Previous Project</span>
                 <strong>${previousProject.title}</strong>
               </a>
-              <a class="button button-ghost" href="projects.html">All Projects</a>
+              <a class="button button-ghost all-projects-link" href="projects.html">All Projects</a>
               <a class="button button-deep-green next-project-link" href="project.html?slug=${nextProject.slug}">
                 <span>Next Project</span>
                 <strong>${nextProject.title}</strong>
@@ -439,6 +439,44 @@ const setupScrollMotion = () => {
 
   window.addEventListener("resize", update);
   update();
+};
+
+const setupMobileNav = () => {
+  const topbar = document.querySelector(".topbar");
+  const toggle = document.querySelector(".mobile-nav-toggle");
+  if (!topbar || !toggle) return;
+  const currentLink = topbar.querySelector(".main-nav a[aria-current='page']");
+  const currentPage = document.createElement("button");
+  currentPage.className = "mobile-current-page";
+  currentPage.type = "button";
+  currentPage.textContent = currentLink?.textContent?.trim() || "Menu";
+  currentPage.setAttribute("aria-label", "Open menu");
+  topbar.insertBefore(currentPage, toggle);
+
+  const closeMenu = () => {
+    topbar.classList.remove("nav-open");
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.setAttribute("aria-label", "Open menu");
+    currentPage.setAttribute("aria-label", "Open menu");
+  };
+
+  const toggleMenu = () => {
+    const isOpen = topbar.classList.toggle("nav-open");
+    toggle.setAttribute("aria-expanded", String(isOpen));
+    toggle.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+    currentPage.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+  };
+
+  toggle.addEventListener("click", toggleMenu);
+  currentPage.addEventListener("click", toggleMenu);
+
+  topbar.querySelectorAll(".main-nav a, .social-links a").forEach((link) => {
+    link.addEventListener("click", closeMenu);
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 900) closeMenu();
+  });
 };
 
 const setupProjectRailControls = () => {
@@ -704,6 +742,7 @@ renderProjectDetail();
 setupVideoControls();
 setupReveal();
 setupScrollMotion();
+setupMobileNav();
 setupProjectRailControls();
 setupAutoScroll();
 setupParticleField();
