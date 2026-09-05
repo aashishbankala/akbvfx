@@ -20,8 +20,17 @@ if (isReloadNavigation && pageName === "index.html") {
 
 const createMedia = (project, className = "project-media") => {
   if (project.coverType === "video") {
+    const controls = className.includes("detail-media") ? " controls" : "";
+    const preload = className.includes("detail-media") ? "auto" : "metadata";
     return `
-      <video class="${className}" src="${project.cover}" autoplay muted loop playsinline preload="metadata"></video>
+      <video class="${className}" src="${project.cover}" autoplay muted loop${controls} playsinline preload="${preload}"></video>
+    `;
+  }
+
+  if (project.coverType === "image") {
+    const loading = className.includes("detail-media") ? "eager" : "lazy";
+    return `
+      <img class="${className}" src="${project.cover}" alt="${project.title}" loading="${loading}" />
     `;
   }
 
@@ -256,19 +265,35 @@ const setupArtworkLightbox = () => {
 };
 
 const renderGalleryItem = (item) => {
+  const layoutClass = item.layout ? ` gallery-${item.layout}` : "";
+  const caption = item.caption || "";
+  const mediaLabel = caption || item.alt || "project media";
+  const figcaption = caption ? `<figcaption>${caption}</figcaption>` : "";
+
   if (item.type === "video") {
     return `
-      <figure class="gallery-item">
-        <video src="${item.src}" autoplay muted loop controls playsinline preload="metadata"></video>
-        <figcaption>${item.caption}</figcaption>
+      <figure class="gallery-item${layoutClass}">
+        <video src="${item.src}" autoplay muted loop controls playsinline preload="auto"></video>
+        ${figcaption}
+      </figure>
+    `;
+  }
+
+  if (item.type === "pdf") {
+    return `
+      <figure class="gallery-item gallery-pdf${layoutClass}">
+        <iframe src="${item.src}" title="${mediaLabel}"></iframe>
+        ${figcaption}
       </figure>
     `;
   }
 
   return `
-    <figure class="gallery-item">
-      <img src="${item.src}" alt="${item.caption}" loading="lazy" />
-      <figcaption>${item.caption}</figcaption>
+    <figure class="gallery-item${layoutClass}">
+      <a class="gallery-image-link" href="${item.src}" target="_blank" rel="noreferrer" aria-label="Open ${mediaLabel}">
+        <img src="${item.src}" alt="${mediaLabel}" loading="eager" />
+      </a>
+      ${figcaption}
     </figure>
   `;
 };
@@ -316,19 +341,19 @@ const renderProjectDetail = () => {
 
       <section class="detail-meta-grid" data-reveal>
         <div>
-          <span>Date</span>
+          <span>Project Date</span>
           <strong>${project.date}</strong>
         </div>
         <div>
-          <span>Role</span>
+          <span>Responsibility</span>
           <strong>${project.role}</strong>
         </div>
         <div>
-          <span>Software</span>
+          <span>Primary Software</span>
           <strong>${project.software.join(", ")}</strong>
         </div>
         <div>
-          <span>Renderer</span>
+          <span>Render Engine</span>
           <strong>${project.renderer}</strong>
         </div>
       </section>
@@ -336,7 +361,7 @@ const renderProjectDetail = () => {
       <section class="detail-gallery" data-reveal>
         <div class="section-heading">
           <p class="eyebrow">Project Media</p>
-          <h2>Final previews, process captures, and breakdown material.</h2>
+          <h2>Technical breakdowns and Process captures</h2>
         </div>
         ${
           project.gallery.length
@@ -446,10 +471,17 @@ const setupMobileNav = () => {
   const toggle = document.querySelector(".mobile-nav-toggle");
   if (!topbar || !toggle) return;
   const currentLink = topbar.querySelector(".main-nav a[aria-current='page']");
+  const currentPath = window.location.pathname.split("/").pop() || "index.html";
+  const fallbackPage =
+    currentPath === "project.html"
+      ? "Projects"
+      : currentPath === "index.html"
+        ? "Demo Reel"
+        : "Menu";
   const currentPage = document.createElement("button");
   currentPage.className = "mobile-current-page";
   currentPage.type = "button";
-  currentPage.textContent = currentLink?.textContent?.trim() || "Menu";
+  currentPage.textContent = currentLink?.textContent?.trim() || fallbackPage;
   currentPage.setAttribute("aria-label", "Open menu");
   topbar.insertBefore(currentPage, toggle);
 

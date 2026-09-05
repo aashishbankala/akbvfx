@@ -1490,40 +1490,67 @@ svg {
 
 .detail-meta-grid {
   display: grid;
-  margin-top: 0.5rem;
+  margin-top: 1.65rem;
   width: 100%;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1px;
+  gap: 0;
   overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--line);
+  border: 1px solid rgba(238, 244, 238, 0.14);
+  border-radius: 18px;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(88, 255, 143, 0.12), transparent 48rem),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018));
+  box-shadow:
+    0 22px 60px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 
 .detail-meta-grid div {
+  position: relative;
   display: grid;
-  gap: 0.5rem;
+  gap: 0.6rem;
   min-height: 0;
   min-width: 0;
   place-items: center;
-  padding: clamp(1rem, 1.6vw, 1.4rem);
+  padding: clamp(1.15rem, 1.7vw, 1.65rem) clamp(1rem, 2vw, 1.8rem);
   text-align: center;
-  background: rgba(10, 13, 12, 0.96);
+  background: rgba(8, 12, 10, 0.72);
+}
+
+.detail-meta-grid div + div::before {
+  content: "";
+  position: absolute;
+  top: 22%;
+  bottom: 22%;
+  left: 0;
+  width: 1px;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(238, 244, 238, 0.16),
+    rgba(88, 255, 143, 0.2),
+    transparent
+  );
 }
 
 .detail-meta-grid span {
   color: var(--green);
-  font-size: 0.75rem;
-  font-weight: 800;
+  font-size: clamp(0.78rem, 0.88vw, 0.94rem);
+  font-weight: 740;
   text-transform: uppercase;
+  text-shadow: 0 0 12px rgba(88, 255, 143, 0.22);
 }
 
 .detail-meta-grid strong {
   color: var(--text);
-  font-size: clamp(0.95rem, 1vw, 1.08rem);
-  line-height: 1.45;
+  font-size: clamp(1rem, 1.24vw, 1.28rem);
+  font-weight: 760;
+  line-height: 1.18;
   max-width: 100%;
   overflow-wrap: break-word;
+  text-shadow: 0 0 14px rgba(255, 255, 255, 0.12);
 }
 
 .detail-gallery {
@@ -1537,14 +1564,20 @@ svg {
   text-wrap: balance;
 }
 
+.detail-gallery .section-heading .eyebrow {
+  font-size: clamp(0.78rem, 0.88vw, 0.94rem);
+  font-weight: 740;
+}
+
 .gallery-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 1rem;
   margin-top: 2rem;
 }
 
 .gallery-item {
+  grid-column: span 2;
   margin: 0;
   overflow: hidden;
   border: 1px solid var(--line);
@@ -1556,8 +1589,53 @@ svg {
 .gallery-item img {
   display: block;
   width: 100%;
-  max-height: 78svh;
+  height: 100%;
+  max-height: 46svh;
+  aspect-ratio: 16 / 9;
   object-fit: cover;
+}
+
+.gallery-image-link {
+  display: block;
+  color: inherit;
+}
+
+.gallery-half {
+  grid-column: span 3;
+}
+
+.gallery-wide {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+.gallery-wide video,
+.gallery-wide img {
+  max-height: 68svh;
+}
+
+.gallery-wide img {
+  height: auto;
+  aspect-ratio: auto;
+  object-fit: contain;
+}
+
+.gallery-pdf {
+  grid-column: 1 / -1;
+  width: min(100%, 980px);
+  justify-self: center;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(88, 255, 143, 0.1), transparent 38rem),
+    rgba(255, 255, 255, 0.035);
+}
+
+.gallery-pdf iframe {
+  display: block;
+  width: 100%;
+  height: min(82svh, 980px);
+  min-height: 620px;
+  border: 0;
+  background: #080b09;
 }
 
 .gallery-item figcaption {
@@ -1927,6 +2005,11 @@ body.has-art-lightbox {
   opacity: 1;
 }
 
+.detail-page [data-reveal] {
+  transform: none;
+  opacity: 1;
+}
+
 .topbar[data-reveal] {
   transform: translateX(-50%) translateY(18px);
 }
@@ -2134,8 +2217,8 @@ body.has-art-lightbox {
     grid-column: 1;
     grid-row: 1;
     align-self: center;
-    gap: 0.55rem;
-    transform: translateY(6px);
+    gap: 0.32rem;
+    transform: translate(-7px, 6px);
   }
 
   .topbar .brand-mark {
@@ -2191,6 +2274,20 @@ body.has-art-lightbox {
 
   .detail-meta-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .gallery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .gallery-item,
+  .gallery-half {
+    grid-column: span 1;
+  }
+
+  .gallery-wide,
+  .gallery-pdf {
+    grid-column: 1 / -1;
   }
 
   .detail-hero {
@@ -2378,5 +2475,21 @@ body.has-art-lightbox {
 
   .detail-meta-grid {
     grid-template-columns: 1fr;
+  }
+
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-item,
+  .gallery-half,
+  .gallery-wide,
+  .gallery-pdf {
+    grid-column: 1 / -1;
+  }
+
+  .gallery-item video,
+  .gallery-item img {
+    max-height: 58svh;
   }
 }
